@@ -50,8 +50,9 @@
                 </div>
             </a>
 
-
-            <a href="login.php"><button class="login-button">Login</button></a>
+            <a href="login.php">
+                <button class="login-button">Login</button>
+            </a>
         </div>
     </header>
     <main>
@@ -61,8 +62,8 @@
             <form method="post">
                 <input type="text" id="firstname" name="firstname" placeholder="First name" required>
                 <input type="text" id="lastname" name="lastname" placeholder="Last name" required>
-                <input type="text" id="id_num" name="id_num" placeholder="Identity number (13 digits)" pattern="\d{13}" maxlength="13" title="ID must be exactly 13 digits" required>
-                <input type="tel" id="phone" name="phone" placeholder="Contact number (e.g., 0812345678)" pattern="0\d{9}" maxlength="10" title="Phone must start with 0 and be 10 digits" required>
+                <input type="text" id="id_num" name="id_num" placeholder="Identity number" pattern="\d{13}" maxlength="13" title="ID must be exactly 13 digits" required>
+                <input type="tel" id="phone" name="phone" placeholder="Contact number" pattern="0\d{9}" maxlength="10" title="Phone must start with 0 and be 10 digits" required>
                 <input type="email" id="email" name="email" placeholder="Email address" required>
                 <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" placeholder="Password" required>
                 <div id="message">
@@ -102,17 +103,17 @@ var capital = document.getElementById("capital");
 var number = document.getElementById("number");
 var length = document.getElementById("length");
 
-// When the user clicks on the password field, show the message box
+// If user clicks on the password field, show the paasword requirements
 myInput.onfocus = function() {
   document.getElementById("message").style.display = "block";
 }
 
-// When the user clicks outside of the password field, hide the message box
+// hide the password requirements
 myInput.onblur = function() {
   document.getElementById("message").style.display = "none";
 }
 
-// When the user starts to type something inside the password field
+// validate password as it is entered
 myInput.onkeyup = function() {
   // Validate lowercase letters
   var lowerCaseLetters = /[a-z]/g;

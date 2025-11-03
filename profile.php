@@ -32,14 +32,7 @@ if (isset($_POST['save-changes'])) {
     $checkEmail = $conn->query("SELECT user_id FROM user WHERE email = '$email' AND user_id != '$user_id'");
     
     if ($checkEmail->num_rows > 0) {
-        echo
-        "<script>
-            swal({
-                title: 'Email Already Exists',
-                text: 'This email is already registered to another account.',
-                icon: 'warning'
-             });
-        </script>";
+        $error_message = 'This email is already registered to another account.';
     } else {
         // Update user information
         $updateQuery = "UPDATE user SET 
@@ -57,25 +50,9 @@ if (isset($_POST['save-changes'])) {
             $_SESSION['email'] = $email;
             $_SESSION['identity_number'] = $id_number;
             
-            echo
-            "<script>
-                swal({
-                    title: 'Success!',
-                    text: 'Your profile has been updated successfully.',
-                    icon: 'success'
-                 }).then(function(){
-                    window.location = 'profile.php';
-                 });
-            </script>";
+            $success_message = 'Your profile has been updated successfully.';
         } else {
-            echo
-            "<script>
-                swal({
-                    title: 'Error',
-                    text: 'Failed to update profile. Please try again.',
-                    icon: 'error'
-                 });
-            </script>";
+            $error_message = 'Failed to update profile. Please try again.';
         }
     }
 }
@@ -125,11 +102,14 @@ if (isset($_POST['save-changes'])) {
         </div>
 
         <div class="nav-tabs">
-            <a href="profile.php">
+            <a href="#">
                 <div class="tab">
-                    <i class='fas fa-user'></i>
-                    <p><?php echo htmlspecialchars($_SESSION['firstname']); ?></p>
+                    <img class="flag" src="./images/south_african_flag.png" />
+                    <p>EN</p>
                 </div>
+            </a>
+            <a href="profile.php">
+                <i class='fa fa-user'></i>
             </a>
 
             <a href="logout.php" style="text-decoration: none;">
@@ -164,6 +144,28 @@ if (isset($_POST['save-changes'])) {
     </footer>  
 
     <script src="./scripts/sweetalert.js"></script>
+    
+    <?php if (isset($success_message)): ?>
+    <script>
+        swal({
+            title: 'Success!',
+            text: '<?php echo $success_message; ?>',
+            icon: 'success',
+        }).then(function(){
+            window.location = 'profile.php';
+        });
+    </script>
+    <?php endif; ?>
+    
+    <?php if (isset($error_message)): ?>
+    <script>
+        swal({
+            title: 'Error',
+            text: '<?php echo $error_message; ?>',
+            icon: 'warning',
+        });
+    </script>
+    <?php endif; ?>
 
 </body>
 </html>

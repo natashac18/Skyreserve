@@ -31,7 +31,7 @@ if (isset($_POST['checkin'])) {
 if (isset($_POST['cancel_booking'])) {
     $booking_id = $_POST['booking_id'];
     
-    // Simply update booking status to cancelled (don't delete anything)
+    // Simply update booking status to cancelled
     $stmt = $conn->prepare("UPDATE booking SET status = 'cancelled' WHERE booking_id = ? AND user_id = ?");
     $stmt->bind_param("ii", $booking_id, $user_id);
     
@@ -49,7 +49,7 @@ if (isset($_POST['cancel_booking'])) {
 // Handle flight upgrade from Economy to Business
 if (isset($_POST['upgrade_flight'])) {
     $booking_id = $_POST['booking_id'];
-    $upgrade_cost = 500; // Fixed upgrade cost per person
+    $upgrade_cost = 500;
     
     // Get booking details and count passengers
     $stmt = $conn->prepare("SELECT COUNT(DISTINCT t.ticket_id) as ticket_count, pay.amount 
