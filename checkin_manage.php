@@ -46,6 +46,51 @@ if (isset($_POST['cancel_booking'])) {
     }
 }
 
+// Handle flight upgrade from Economy to Business
+if (isset($_POST['upgrade_flight'])) {
+    $booking_id = $_POST['booking_id'];
+    $upgrade_cost = 500; // Fixed upgrade cost per person
+    
+    // Get booking details and count passengers
+    $stmt = $conn->prepare("SELECT COUNT(DISTINCT t.ticket_id) as ticket_count, pay.amount 
+                            FROM ticket t 
+                            JOIN booking b ON t.booking_id = b.booking_id 
+                            JOIN payment pay ON b.payment_id = pay.payment_id
+                            WHERE t.booking_id = ? AND b.user_id = ? AND t.travel_class = 'Economy'");
+    $stmt->bind_param("ii", $booking_id, $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $booking_details = $result->fetch_assoc();
+    $stmt->close();
+    
+    if ($booking_details && $booking_details['ticket_count'] > 0) {
+        $total_upgrade_cost = $upgrade_cost * $booking_details['ticket_count'];
+        $new_total = $booking_details['amount'] + $total_upgrade_cost;
+        
+        // Update all tickets to Business class
+        $stmt = $conn->prepare("UPDATE ticket SET travel_class = 'Business' WHERE booking_id = ? AND travel_class = 'Economy'");
+        $stmt->bind_param("i", $booking_id);
+        
+        if ($stmt->execute()) {
+            // Update payment amount
+            $stmt2 = $conn->prepare("UPDATE payment p 
+                                     JOIN booking b ON p.payment_id = b.payment_id 
+                                     SET p.amount = ? 
+                                     WHERE b.booking_id = ? AND b.user_id = ?");
+            $stmt2->bind_param("dii", $new_total, $booking_id, $user_id);
+            $stmt2->execute();
+            $stmt2->close();
+            
+            $success_message = "Successfully upgraded to Business Class! Additional cost: R" . number_format($total_upgrade_cost, 2);
+        } else {
+            $error_message = "Failed to upgrade. Please try again.";
+        }
+        $stmt->close();
+    } else {
+        $error_message = "This booking is not eligible for upgrade.";
+    }
+}
+
 // Check for session messages
 if (isset($_SESSION['success_message'])) {
     $success_message = $_SESSION['success_message'];
@@ -69,6 +114,7 @@ $query = "SELECT
             f2.arrival_timestamp as return_arrival,
             GROUP_CONCAT(DISTINCT t1.seat_number ORDER BY t1.seat_number) as outbound_seats,
             GROUP_CONCAT(DISTINCT t2.seat_number ORDER BY t2.seat_number) as return_seats,
+            GROUP_CONCAT(DISTINCT t1.travel_class) as travel_class,
             COUNT(DISTINCT p.passenger_id) as total_passengers,
             pay.amount as total_amount
           FROM booking b
@@ -171,6 +217,7 @@ $result = $stmt->get_result();
                         <th>Booking ID</th>
                         <th>Booking Date</th>
                         <th>Flight Details</th>
+                        <th>Class</th>
                         <th>Passengers</th>
                         <th>Seats</th>
                         <th>Total Amount</th>
@@ -192,6 +239,12 @@ $result = $stmt->get_result();
                                     <?php echo htmlspecialchars($booking['return_origin']); ?> → 
                                     <?php echo htmlspecialchars($booking['return_destination']); ?><br>
                                     <small><?php echo date('d M Y H:i', strtotime($booking['return_departure'])); ?></small>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <strong><?php echo htmlspecialchars($booking['travel_class']); ?></strong>
+                                <?php if ($booking['travel_class'] === 'Economy'): ?>
+                                    <br><small style="color: #0E2D6E;">✈️ Upgrade available</small>
                                 <?php endif; ?>
                             </td>
                             <td><?php echo $booking['total_passengers']; ?></td>
@@ -217,6 +270,17 @@ $result = $stmt->get_result();
                                         onclick="window.location.href='eticket.php?booking_id=<?php echo $booking['booking_id']; ?>'">
                                     <i class="fas fa-ticket-alt"></i> View E-Ticket
                                 </button>
+                                
+                                <?php if ($booking['travel_class'] === 'Economy' && $booking['status'] !== 'cancelled'): ?>
+                                    <form method="POST" style="display: inline;">
+                                        <input type="hidden" name="booking_id" value="<?php echo $booking['booking_id']; ?>">
+                                        <button type="submit" name="upgrade_flight" class="action-button btn-upgrade" 
+                                                onclick="return confirm('Upgrade to Business Class for R500 per passenger?');"
+                                                style="background-color: #D4AF37; color: white;">
+                                            <i class="fas fa-arrow-circle-up"></i> Upgrade to Business
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
                                 
                                 <?php if ($booking['status'] !== 'cancelled'): ?>
                                     <button class="action-button btn-edit" 

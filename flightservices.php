@@ -50,8 +50,9 @@
                 </div>
             </a>
 
-
-            <button class="login-button">Login</button>
+            <a href="login.php" style="text-decoration: none;">
+                <button class="login-button">Login</button>
+            </a>
         </div>
     </header>
 

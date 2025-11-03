@@ -51,7 +51,7 @@
             </a>
 
 
-            <button class="login-button">Login</button>
+            <a href="login.php"><button class="login-button">Login</button></a>
         </div>
     </header>
     <main>
@@ -61,8 +61,8 @@
             <form method="post">
                 <input type="text" id="firstname" name="firstname" placeholder="First name" required>
                 <input type="text" id="lastname" name="lastname" placeholder="Last name" required>
-                <input type="text" id="id_num" name="id_num" placeholder="Identity number" required>
-                <input type="tel" id="phone" name="phone" placeholder="Contact number" required>
+                <input type="text" id="id_num" name="id_num" placeholder="Identity number (13 digits)" pattern="\d{13}" maxlength="13" title="ID must be exactly 13 digits" required>
+                <input type="tel" id="phone" name="phone" placeholder="Contact number (e.g., 0812345678)" pattern="0\d{9}" maxlength="10" title="Phone must start with 0 and be 10 digits" required>
                 <input type="email" id="email" name="email" placeholder="Email address" required>
                 <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" placeholder="Password" required>
                 <div id="message">
@@ -171,9 +171,57 @@ if (isset($_POST['register'])) {
     $email = $_POST['email'];
     // hashing and secure storage of password in the database
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $role = $_POST['role']; 
+    $role = $_POST['role'];
+    
+    // Validate ID number (must be exactly 13 digits)
+    if (strlen($id_num) != 13 || !ctype_digit($id_num)) {
+        echo
+        "<script>
+            swal({
+                text: 'ID number must be exactly 13 digits.',
+                icon: 'warning'
+             });
+        </script>";
+        exit;
+    }
+    
+    // Validate phone number (must be exactly 10 digits)
+    if (strlen($phone) != 10 || !ctype_digit($phone)) {
+        echo
+        "<script>
+            swal({
+                text: 'Phone number must be exactly 10 digits.',
+                icon: 'warning'
+             });
+        </script>";
+        exit;
+    }
+    
+    // Phone must start with 0
+    if ($phone[0] != '0') {
+        echo
+        "<script>
+            swal({
+                text: 'Phone number must start with 0.',
+                icon: 'warning'
+             });
+        </script>";
+        exit;
+    }
+    
+    // Phone cannot be all zeros or invalid patterns
+    if ($phone == '0000000000' || preg_match('/^(\d)\1{9}$/', $phone)) {
+        echo
+        "<script>
+            swal({
+                text: 'Please enter a valid phone number.',
+                icon: 'warning'
+             });
+        </script>";
+        exit;
+    }
 
-    // if an email is not registered/stored in the database then proceeds to add user info
+    // Check if email already exists
     $checkEmail =$conn->query("SELECT email from user where email = '$email'");
 
     if ($checkEmail->num_rows > 0){

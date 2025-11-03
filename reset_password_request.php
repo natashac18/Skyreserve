@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkyReserve Login</title>
-    <link rel="stylesheet" href=  "styles.css">
+    <title>Reset Password - SkyReserve</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css">
 </head>
 
@@ -51,23 +51,20 @@
                 </div>
             </a>
 
-
-            <a href="login.php">
+            <a href="login.php" style="text-decoration: none;">
                 <button class="login-button">Login</button>
             </a>
         </div>
     </header>
     <main>
     <div class="box">
-        <h2>Welcome!</h2>
-        <p class="info">Login to Skyreserve</p>
+        <h2>Reset Your Password</h2>
+        <p class="info">Enter your email address to begin password reset</p>
         <form method="POST">
             <input type="email" id="email" name="email" placeholder="Email address" required>
-            <input type="password" id="password" name="password" placeholder="Password" required>
-            <input class="submit-button" type="submit" name="login" value="Login">
+            <input class="submit-button" type="submit" name="reset_request" value="Continue">
         </form>
-        <p><a href="reset_password_request.php">Forgot your password?</a></p>
-        <p>Don't have an account? <a href="registration.php">Sign up here</a></p>
+        <p>Remember your password? <a href="login.php">Login here</a></p>
     </div>
     </main>
     <footer>
@@ -84,58 +81,36 @@
 </html>
 
 <?php
-
 include 'config.php';
 
-if (isset($_POST['login'])) {
-
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    $result = $conn->query("SELECT * from user where email= '$email'");
-
+if (isset($_POST['reset_request'])) {
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    
+    // Check if email exists in database
+    $result = $conn->query("SELECT user_id, firstname, lastname, identity_number FROM user WHERE email = '$email'");
+    
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
-
-        if (password_verify($password,$user['password'])){
-
-            // Start session and store user information
-            session_start();
-            $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['firstname'] = $user['firstname'];
-            $_SESSION['lastname'] = $user['lastname'];
-            $_SESSION['email'] = $user['email'];
-            $_SESSION['role'] = $user['role'];
-            $_SESSION['identity_number'] = $user['identity_number'];
-
-            if ($user['role'] === 'admin'){
-                header('Location: adminhome.php');
-            }
-            else {
-                header('Location: userhome.php');
-            }
-
-        } else {
-        echo 
-        "<script>
-            swal({
-                title: 'Invalid Password',
-                text: 'The password you entered is incorrect. Try Again',
-                icon: 'warning',
-                });
-        </script>";
-        }
+        
+        // Start session and store email for verification
+        session_start();
+        $_SESSION['reset_email'] = $email;
+        $_SESSION['reset_user_id'] = $user['user_id'];
+        $_SESSION['reset_timestamp'] = time(); // Session expires in 15 minutes
+        
+        // Redirect to identity verification page
+        header('Location: verify_identity.php');
+        exit();
+        
     } else {
         echo 
         "<script>
             swal({
-                title: 'Invalid Email',
-                text: 'The email you entered is incorrect. Try Again',
+                title: 'Email Not Found',
+                text: 'No account found with that email address.',
                 icon: 'warning',
-                });
+            });
         </script>";
-        }       
-            
+    }
 }
-
 ?>
