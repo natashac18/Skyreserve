@@ -82,14 +82,14 @@
             </form>
             <div class="agreement">
                 <input type="checkbox" required>
-                <p class="info">By signing up, I agree to Skyreserve's <a href="#">Terms & Conditions</a></p>
+                <p class="info">By signing up, I agree to Skyreserve's <a href="termsconditions.html">Terms & Conditions</a></p>
             </div>
         </div>
     </main>
     <footer>
         <div class="docs">
             <a href="#">Privacy</a>
-            <a href="#">Terms & Conditions</a>
+            <a href="termsconditions.html">Terms & Conditions</a>
         </div>
         <div>
             <p>Copyright &copy; 2025 Skyreserve. All Rights Reserved.</p>

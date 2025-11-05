@@ -96,7 +96,7 @@ $user = $result->fetch_assoc();
     <footer>
         <div class="docs">
             <a href="#">Privacy</a>
-            <a href="#">Terms & Conditions</a>
+            <a href="termsconditions.html">Terms & Conditions</a>
         </div>
         <div>
             <p>Copyright &copy; 2025 Skyreserve. All Rights Reserved.</p>
