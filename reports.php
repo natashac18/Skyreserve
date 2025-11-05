@@ -85,13 +85,6 @@ $total_revenue_data = $total_revenue_result->fetch_assoc();
                 </div>
             </a>
 
-            <a href="booking.php">
-                <div class="tab">
-                    <i class='far fa-calendar-alt'></i>
-                    <p>Book</p>
-                </div>
-            </a>
-
             <a href="contact.php">
                 <div class="tab">
                     <i class='fas fa-phone'></i>
