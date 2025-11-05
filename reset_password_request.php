@@ -51,7 +51,7 @@
                 </div>
             </a>
 
-            <a href="login.php" style="text-decoration: none;">
+            <a href="index.php" style="text-decoration: none;">
                 <button class="login-button">Login</button>
             </a>
         </div>
@@ -64,7 +64,7 @@
             <input type="email" id="email" name="email" placeholder="Email address" required>
             <input class="submit-button" type="submit" name="reset_request" value="Continue">
         </form>
-        <p>Remember your password? <a href="login.php">Login here</a></p>
+        <p>Remember your password? <a href="index.php">Login here</a></p>
     </div>
     </main>
     <footer>

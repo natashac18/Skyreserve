@@ -75,7 +75,7 @@ $user = $result->fetch_assoc();
                 </div>
             </a>
 
-            <a href="login.php" style="text-decoration: none;">
+            <a href="index.php" style="text-decoration: none;">
                 <button class="login-button">Login</button>
             </a>
         </div>
@@ -90,7 +90,7 @@ $user = $result->fetch_assoc();
             <input type="text" id="identity_number" name="identity_number" placeholder="Identity number" required>
             <input class="submit-button" type="submit" name="verify" value="Verify Identity">
         </form>
-        <p><a href="reset_password_request.php">Start over</a> | <a href="login.php">Back to Login</a></p>
+        <p><a href="reset_password_request.php">Start over</a> | <a href="index.php">Back to Login</a></p>
     </div>
     </main>
     <footer>

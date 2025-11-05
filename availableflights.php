@@ -82,7 +82,7 @@ $arrivalCode = substr($arrival, 0, 3);
                     <button class="login-button">Logout</button>
                 </a>
             <?php else: ?>
-                <a href="login.php" style="text-decoration: none;">
+                <a href="index.php" style="text-decoration: none;">
                     <button class="login-button">Login</button>
                 </a>
             <?php endif; ?>

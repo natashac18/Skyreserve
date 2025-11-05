@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_passengers']))
                     <button class="login-button">Logout</button>
                 </a>
             <?php else: ?>
-                <a href="login.php" style="text-decoration: none;">
+                <a href="index.php" style="text-decoration: none;">
                     <button class="login-button">Login</button>
                 </a>
             <?php endif; ?>

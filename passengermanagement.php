@@ -76,7 +76,7 @@
     
     // Check if user is admin
     if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-        header('Location: login.php');
+        header('Location: index.php');
         exit();
     }
     

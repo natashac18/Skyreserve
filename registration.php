@@ -50,7 +50,7 @@
                 </div>
             </a>
 
-            <a href="login.php">
+            <a href="index.php">
                 <button class="login-button">Login</button>
             </a>
         </div>
@@ -243,7 +243,7 @@ if (isset($_POST['register'])) {
                 text: 'Your account has successfully been created',
                 icon: 'success',
                 }). then(function(){
-                window.location = 'login.php';
+                window.location = 'index.php';
              });
         </script>";
         

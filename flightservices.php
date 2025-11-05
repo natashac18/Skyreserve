@@ -13,7 +13,7 @@
 
         <div class="nav-tabs">
 
-            <a href="login.php">
+            <a href="index.php">
                 <div class="tab" >
                     <i class='fas fa-home'></i>
                     <p>Home</p>
@@ -50,7 +50,7 @@
                 </div>
             </a>
 
-            <a href="login.php" style="text-decoration: none;">
+            <a href="index.php" style="text-decoration: none;">
                 <button class="login-button">Login</button>
             </a>
         </div>

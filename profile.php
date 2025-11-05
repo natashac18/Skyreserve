@@ -5,7 +5,7 @@ include 'config.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: index.php');
     exit();
 }
 
@@ -16,7 +16,7 @@ $result = $conn->query("SELECT * FROM user WHERE user_id = '$user_id'");
 if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
 } else {
-    header('Location: login.php');
+    header('Location: index.php');
     exit();
 }
 

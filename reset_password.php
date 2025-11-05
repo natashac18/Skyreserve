@@ -71,7 +71,7 @@ $user_id = $_SESSION['reset_user_id'];
                 </div>
             </a>
 
-            <a href="login.php" style="text-decoration: none;">
+            <a href="index.php" style="text-decoration: none;">
                 <button class="login-button">Login</button>
             </a>
         </div>
@@ -202,7 +202,7 @@ if (isset($_POST['reset_password'])) {
                 text: 'Your password has been reset successfully. You can now login with your new password.',
                 icon: 'success',
             }).then(function(){
-                window.location = 'login.php';
+                window.location = 'index.php';
             });
         </script>";
     }
