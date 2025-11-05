@@ -74,7 +74,7 @@
                 <p><span>Add, Update or Remove Flights</span></p>
             </div>
             </a>
-            <a href="reports.php"  class="flight-mng">
+            <a href="reports.php"  class="reporting">
             <div>
                 <p>Reporting</p>
                 <p><span>Key Metrics, Trends, and Operational Insights</span></p>

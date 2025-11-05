@@ -13,7 +13,6 @@ require 'config.php';
 $total_bookings_query = "SELECT 
     COUNT(*) as total_bookings,
     COUNT(CASE WHEN status = 'complete' THEN 1 END) as confirmed_bookings,
-    COUNT(CASE WHEN status = 'checked-in' THEN 1 END) as checked_in_bookings,
     COUNT(CASE WHEN status = 'cancelled' THEN 1 END) as cancelled_bookings
 FROM booking";
 $total_bookings_result = $conn->query($total_bookings_query);
@@ -131,11 +130,6 @@ $total_revenue_data = $total_revenue_result->fetch_assoc();
                     <h3 style="margin: 10px 0; font-size: 28px;"><?php echo $total_bookings['confirmed_bookings']; ?></h3>
                     <p style="margin: 0; opacity: 0.9;">Confirmed</p>
                 </div>
-                <div style="background: linear-gradient(135deg, #3498db, #5dade2); color: white; padding: 20px; border-radius: 8px; text-align: center;">
-                    <i class="fas fa-plane-departure" style="font-size: 32px; margin-bottom: 10px;"></i>
-                    <h3 style="margin: 10px 0; font-size: 28px;"><?php echo $total_bookings['checked_in_bookings']; ?></h3>
-                    <p style="margin: 0; opacity: 0.9;">Checked In</p>
-                </div>
                 <div style="background: linear-gradient(135deg, #5dade2, #85c1e9); color: white; padding: 20px; border-radius: 8px; text-align: center;">
                     <i class="fas fa-money-bill-wave" style="font-size: 32px; margin-bottom: 10px;"></i>
                     <h3 style="margin: 10px 0; font-size: 28px;">R <?php echo number_format($total_revenue_data['total_revenue'] ?? 0, 2); ?></h3>
@@ -156,11 +150,6 @@ $total_revenue_data = $total_revenue_result->fetch_assoc();
                         <td><span style="color: #28a745; font-weight: bold;">Confirmed</span></td>
                         <td><?php echo $total_bookings['confirmed_bookings']; ?></td>
                         <td><?php echo $total_bookings['total_bookings'] > 0 ? round(($total_bookings['confirmed_bookings'] / $total_bookings['total_bookings']) * 100, 1) : 0; ?>%</td>
-                    </tr>
-                    <tr>
-                        <td><span style="color: #007bff; font-weight: bold;">Checked In</span></td>
-                        <td><?php echo $total_bookings['checked_in_bookings']; ?></td>
-                        <td><?php echo $total_bookings['total_bookings'] > 0 ? round(($total_bookings['checked_in_bookings'] / $total_bookings['total_bookings']) * 100, 1) : 0; ?>%</td>
                     </tr>
                     <tr>
                         <td><span style="color: #dc3545; font-weight: bold;">Cancelled</span></td>

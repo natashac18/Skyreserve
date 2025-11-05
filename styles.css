@@ -337,7 +337,7 @@ footer p{
     text-align: center 
 }
 
-.flight-mng, .booking-mng, .checkin-mng, .flight-status {
+.flight-mng, .booking-mng, .checkin-mng, .reporting {
     background-color: #0E2D6E;
     text-align: center;
     width: 50%;
@@ -349,7 +349,7 @@ footer p{
     background-color: #004F98;
 }
 
-.flight-status {
+.reporting {
     background-color: #0073E6;
 }
 .flight-mng:hover, .booking-mng:hover, .checkin-mng:hover, .flight-status:hover {

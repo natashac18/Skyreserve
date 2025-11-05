@@ -126,7 +126,7 @@ $query = "SELECT
           LEFT JOIN flight f2 ON t2.flight_id = f2.flight_id
           LEFT JOIN passenger p ON (p.ticket_id = t1.ticket_id OR p.ticket_id = t2.ticket_id)
           LEFT JOIN payment pay ON b.payment_id = pay.payment_id
-          WHERE b.user_id = ? AND (b.status != 'cancelled' AND b.status != '' AND b.status IS NOT NULL)
+          WHERE b.user_id = ? AND (b.status NOT IN ('cancelled', '') AND b.status IS NOT NULL)
           GROUP BY b.booking_id
           ORDER BY b.booking_date DESC";
 
@@ -216,6 +216,7 @@ $result = $stmt->get_result();
                     <tr>
                         <th>Booking ID</th>
                         <th>Booking Date</th>
+                        <th>Status</th>
                         <th>Flight Details</th>
                         <th>Class</th>
                         <th>Passengers</th>
@@ -227,6 +228,21 @@ $result = $stmt->get_result();
                         <tr>
                             <td>SKY<?php echo str_pad($booking['booking_id'], 8, '0', STR_PAD_LEFT); ?></td>
                             <td><?php echo date('d M Y', strtotime($booking['booking_date'])); ?></td>
+                            <td>
+                                <?php if ($booking['status'] === 'checked-in'): ?>
+                                    <span style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold;">
+                                        <i class="fas fa-check-circle"></i> Checked In
+                                    </span>
+                                <?php elseif ($booking['status'] === 'complete'): ?>
+                                    <span style="background-color: #0E2D6E; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold;">
+                                        <i class="fas fa-clock"></i> Confirmed
+                                    </span>
+                                <?php else: ?>
+                                    <span style="background-color: #6c757d; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold;">
+                                        <?php echo ucfirst($booking['status']); ?>
+                                    </span>
+                                <?php endif; ?>
+                            </td>
                             <td>
                                 <strong><?php echo htmlspecialchars($booking['outbound_flight']); ?></strong><br>
                                 <?php echo htmlspecialchars($booking['outbound_origin']); ?> → 

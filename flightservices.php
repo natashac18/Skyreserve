@@ -13,7 +13,7 @@
 
         <div class="nav-tabs">
 
-            <a href="#">
+            <a href="login.php">
                 <div class="tab" >
                     <i class='fas fa-home'></i>
                     <p>Home</p>
